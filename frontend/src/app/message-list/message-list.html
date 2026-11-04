@@ -1,0 +1,78 @@
+<div class="scroller" #scroller>
+  <div class="column">
+    @if (store.conversationLoading()) {
+      <div class="center muted">Caricamento conversazione…</div>
+    } @else if (store.messages().length === 0 && !store.sending()) {
+      <div class="empty">
+        <h2>Come posso aiutarti con il DNS?</h2>
+        <p>
+          Scrivi la richiesta (es. <em>«Configura la zona con i record di Shopify»</em>) e incolla
+          la zona DNS di partenza nella seconda barra. Ti restituirò la zona aggiornata.
+        </p>
+      </div>
+    }
+
+    @for (m of store.messages(); track $index) {
+      @switch (m.role) {
+        @case ('user') {
+          <div class="row user">
+            <div class="bubble">
+              <div class="text">{{ m.text }}</div>
+              @if (m.zone) {
+                <details class="zone">
+                  <summary>Zona DNS inviata</summary>
+                  <pre>{{ m.zone }}</pre>
+                </details>
+              }
+            </div>
+          </div>
+        }
+        @case ('assistant') {
+          <div class="row bot">
+            <div class="avatar">AI</div>
+            <div class="bubble">
+              @for (b of m.text | blocks; track $index) {
+                @if (b.type === 'code') {
+                  <div class="code">
+                    <div class="code-head">
+                      <span>{{ b.lang || 'zona dns' }}</span>
+                      <button type="button" (click)="copy(b.content, btn)" #btn>Copia</button>
+                    </div>
+                    <pre>{{ b.content }}</pre>
+                  </div>
+                } @else {
+                  <p class="text">{{ b.content }}</p>
+                }
+              }
+              @if (m.sources?.length || m.time || m.model) {
+                <div class="meta">
+                  @for (s of m.sources ?? []; track s) {
+                    <span class="src" [title]="s">{{ s.split('/').pop() }}</span>
+                  }
+                  @if (m.model || m.time) { 
+                    <span class="time">
+                      {{ m.model }}@if (m.model && m.time) { · }{{ m.time }}
+                    </span> 
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+        @case ('error') {
+          <div class="row"><div class="error">{{ m.text }}</div></div>
+        }
+      }
+    }
+
+    @if (store.sending()) {
+      <div class="row bot">
+        <div class="avatar">AI</div>
+        <div class="bubble typing" aria-live="polite">
+          <span></span><span></span><span></span>
+          <em>Sto elaborando…</em>
+        </div>
+      </div>
+    }
+  </div>
+</div>

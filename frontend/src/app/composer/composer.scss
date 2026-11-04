@@ -1,0 +1,96 @@
+.dock {
+  padding: 0 1.25rem 1.25rem;
+  background: linear-gradient(to top, var(--bg) 70%, transparent);
+}
+
+.card {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0.85rem 1rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.06);
+  transition: border-color 0.15s;
+  &:focus-within { border-color: var(--accent); }
+}
+
+.field + .field {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--border);
+}
+
+.label-row { display: flex; justify-content: space-between; align-items: baseline; }
+
+label {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.opt { text-transform: none; letter-spacing: 0; font-weight: 400; }
+
+textarea {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  resize: none;
+  background: transparent;
+  field-sizing: content;
+  min-height: 2.9em;
+  max-height: 9rem;
+  overflow-y: auto;
+  &::placeholder { color: var(--muted); opacity: 0.7; }
+}
+
+.zone textarea {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-x: auto;
+  max-height: 11rem;
+}
+
+.clear {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-size: 0.75rem;
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+.hint { color: var(--muted); font-size: 0.72rem; }
+
+.send {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 600;
+  transition: opacity 0.15s;
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+@media (max-width: 800px) {
+  .hint { display: none; }
+  .actions { justify-content: flex-end; }
+}

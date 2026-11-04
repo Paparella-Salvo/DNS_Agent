@@ -1,0 +1,123 @@
+:host { display: block; min-height: 0; }
+
+.side {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1rem 0.75rem;
+  background: var(--surface-2);
+  border-right: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.5rem 1rem;
+}
+.logo {
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.name { font-weight: 600; }
+
+.new {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  font-weight: 500;
+  transition: border-color 0.15s;
+  &:hover { border-color: var(--accent); }
+}
+
+.label {
+  margin: 1.25rem 0.5rem 0.4rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  &:hover { background: color-mix(in srgb, var(--surface) 70%, transparent); }
+  &.active { background: var(--surface); box-shadow: inset 3px 0 0 var(--accent); }
+}
+
+.open {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border: 0;
+  background: none;
+  text-align: left;
+}
+.id {
+  flex: none;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+.title {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.del {
+  display: none;
+  flex: none;
+  padding: 0.35rem;
+  margin-right: 0.3rem;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  &:hover { color: var(--danger); background: var(--danger-soft); }
+}
+.item:hover .del, .item:focus-within .del { display: inline-flex; }
+@media (hover: none) { .del { display: inline-flex; } }
+
+.note {
+  padding: 0.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  &.error { color: var(--danger); }
+}
+.link {
+  display: block;
+  margin-top: 0.3rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  text-decoration: underline;
+}

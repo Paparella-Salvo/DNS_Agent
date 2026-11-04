@@ -1,0 +1,12 @@
+venv/
+.venv/
+**/__pycache__/
+**/*.pyc
+.git
+**/.git
+.env
+**/DNS_repo/
+**/chroma_json/
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/

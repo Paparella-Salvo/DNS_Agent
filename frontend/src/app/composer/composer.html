@@ -1,0 +1,44 @@
+<div class="dock">
+  <form class="card" (submit)="$event.preventDefault(); send()">
+    <div class="field">
+      <label for="req">Richiesta</label>
+      <textarea
+        id="req"
+        rows="2"
+        placeholder="Es. Configura la zona DNS con i record di Shopify"
+        [ngModel]="request()"
+        (ngModelChange)="request.set($event)"
+        name="request"
+        (keydown)="onRequestKey($event)"
+      ></textarea>
+    </div>
+
+    <div class="field zone">
+      <div class="label-row">
+        <label for="zone">Zona DNS <span class="opt">(opzionale)</span></label>
+        @if (zone()) {
+          <button type="button" class="clear" (click)="clearZone()">Svuota</button>
+        }
+      </div>
+      <textarea
+        id="zone"
+        rows="2"
+        spellcheck="false"
+        autocomplete="off"
+        [placeholder]="zonePlaceholder"
+        [ngModel]="zone()"
+        (ngModelChange)="zone.set($event)"
+        name="zone"
+        (keydown)="onZoneKey($event)"
+      ></textarea>
+    </div>
+
+    <div class="actions">
+      <span class="hint">Invio per inviare · Maiusc+Invio a capo · Ctrl+Invio dalla zona</span>
+      <button type="submit" class="send" [disabled]="!canSend()">
+        @if (store.sending()) { Elaborazione… } @else { Invia }
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </form>
+</div>

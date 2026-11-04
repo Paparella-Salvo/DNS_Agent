@@ -1,0 +1,38 @@
+<aside class="side">
+  <div class="brand">
+    <span class="logo">DNS</span>
+    <span class="name">Assistant</span>
+  </div>
+
+  <button type="button" class="new" (click)="newChat()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    Nuova chat
+  </button>
+
+  <div class="label">Conversazioni</div>
+
+  <nav class="list" aria-label="Conversazioni">
+    @if (store.listError(); as err) {
+      <div class="note error">
+        {{ err }}
+        <button type="button" class="link" (click)="store.refreshList()">Riprova</button>
+      </div>
+    } @else if (store.listLoading() && store.conversations().length === 0) {
+      <div class="note">Caricamento…</div>
+    } @else if (store.conversations().length === 0) {
+      <div class="note">Nessuna conversazione. Scrivi la prima richiesta!</div>
+    }
+
+    @for (c of store.conversations(); track c.id) {
+      <div class="item" [class.active]="c.id === store.activeId()">
+        <button type="button" class="open" (click)="open(c.id)" [attr.aria-current]="c.id === store.activeId() ? 'true' : null">
+          <span class="id">#{{ c.id }}</span>
+          <span class="title">{{ c.titolo }}</span>
+        </button>
+        <button type="button" class="del" aria-label="Elimina conversazione" (click)="remove($event, c.id, c.titolo)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>
+        </button>
+      </div>
+    }
+  </nav>
+</aside>

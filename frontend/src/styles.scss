@@ -1,0 +1,52 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f6f5f2;
+  --surface: #ffffff;
+  --surface-2: #efede8;
+  --border: #dedbd3;
+  --text: #1c1b19;
+  --muted: #77736a;
+  --accent: #0f766e;
+  --accent-contrast: #ffffff;
+  --accent-soft: #d9efec;
+  --danger: #b42318;
+  --danger-soft: #fbe4e1;
+  --code-bg: #1d2523;
+  --code-text: #d7efe9;
+  --radius: 14px;
+  --mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #131615;
+    --surface: #1b1f1e;
+    --surface-2: #242928;
+    --border: #2f3533;
+    --text: #e8e6e1;
+    --muted: #8f9a96;
+    --accent: #2dd4bf;
+    --accent-contrast: #05201c;
+    --accent-soft: #15332f;
+    --danger: #f97066;
+    --danger-soft: #3a1c19;
+    --code-bg: #0e1211;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+button { font: inherit; color: inherit; cursor: pointer; }
+textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

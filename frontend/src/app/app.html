@@ -1,0 +1,21 @@
+<div class="shell" [class.sidebar-open]="sidebarOpen()">
+  <app-sidebar (picked)="sidebarOpen.set(false)" />
+  <div class="backdrop" (click)="sidebarOpen.set(false)"></div>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="burger" type="button" aria-label="Apri elenco chat" (click)="sidebarOpen.set(true)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="heading">
+        <h1>{{ store.activeTitle() }}</h1>
+        @if (store.activeId()) {
+          <span class="chip">#{{ store.activeId() }}</span>
+        }
+      </div>
+    </header>
+
+    <app-message-list />
+    <app-composer />
+  </main>
+</div>
