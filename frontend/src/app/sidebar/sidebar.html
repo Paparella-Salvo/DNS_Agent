@@ -1,0 +1,44 @@
+<aside class="side" aria-label="Chat del dominio">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>
+    </span>
+    <span class="brand-text">
+      <span class="name">DNS Assistant</span>
+      <span class="sub">/ {{ zones.domain() || '—' }}</span>
+    </span>
+  </div>
+
+  <button type="button" class="new" (click)="newChat()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    <span class="new-label">Nuova chat</span>
+    <kbd>{{ shortcut }}</kbd>
+  </button>
+
+  <div class="label">Chat</div>
+
+  <nav class="list" aria-label="Chat di {{ zones.domain() }}">
+    @if (store.listError(); as err) {
+      <div class="note error">
+        {{ err }}
+        <button type="button" class="link" (click)="store.refreshList()">Riprova</button>
+      </div>
+    } @else if (store.listLoading() && store.chats().length === 0) {
+      <div class="note">Caricamento…</div>
+    } @else if (store.chats().length === 0) {
+      <div class="note">Nessuna chat per questo dominio. Scrivi la prima richiesta all'assistente.</div>
+    }
+
+    @for (c of store.chats(); track c.id) {
+      <div class="item" [class.active]="c.id === store.activeId()">
+        <button type="button" class="open" (click)="open(c.id)" [attr.aria-current]="c.id === store.activeId() ? 'true' : null">
+          <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="title">{{ title(c.titolo) }}</span>
+        </button>
+        <button type="button" class="del" aria-label="Elimina chat" (click)="remove($event, c.id, c.titolo)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>
+        </button>
+      </div>
+    }
+  </nav>
+</aside>

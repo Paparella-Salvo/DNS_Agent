@@ -1,0 +1,20 @@
+$TTL 3600
+@   IN  SOA     ns1.dominio.it. admin.dominio.it. (
+        2026110901
+        3600
+        1800
+        604800
+        3600 )
+
+@   IN  NS      ns1.dominio.it.
+@   IN  NS      ns2.dominio.it.
+
+ns1 IN  A       192.0.2.1
+ns2 IN  A       192.0.2.2
+
+@   IN  A       198.51.100.50
+www IN  A       198.51.100.50
+mail IN A       198.51.100.60
+
+@   IN  MX  10  mail.dominio.it.
+@   IN  TXT     "v=spf1 mx ~all"

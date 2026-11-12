@@ -1,0 +1,43 @@
+<div class="shell" [class.sidebar-open]="sidebarOpen()" [class.chat-open]="chatOpen()">
+  <app-sidebar class="side" (picked)="onPicked()" />
+  <div class="backdrop" (click)="closePanels()"></div>
+
+  <header class="topbar">
+    <button class="icon-btn burger" type="button" aria-label="Apri la barra laterale" (click)="sidebarOpen.set(true)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+
+    <nav class="crumbs" aria-label="Percorso">
+      <span class="crumb">Workspace</span>
+      <svg class="sep" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      <input
+        class="domain-input"
+        type="text"
+        list="zone-domains"
+        spellcheck="false"
+        autocomplete="off"
+        placeholder="esempio.com"
+        aria-label="Nome del dominio"
+        [style.width.ch]="domainWidth()"
+        [value]="zones.domain()"
+        (change)="setDomain($event)"
+      />
+      <datalist id="zone-domains">
+        @for (d of zones.domains(); track d) {
+          <option [value]="d"></option>
+        }
+      </datalist>
+    </nav>
+
+    <button class="chat-toggle" type="button" (click)="chatOpen.set(!chatOpen())">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistente
+    </button>
+  </header>
+
+  <main class="main">
+    <app-zone-view />
+  </main>
+
+  <app-chat-panel class="chat" />
+</div>

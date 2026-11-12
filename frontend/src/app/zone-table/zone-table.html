@@ -1,0 +1,36 @@
+<div class="table" role="table" aria-label="Record della zona DNS">
+  <div class="row cols" role="row">
+    <div role="columnheader">Host</div>
+    <div role="columnheader">Record</div>
+    <div role="columnheader">Valore</div>
+    <div role="columnheader" class="ttl">TTL (s)</div>
+    <div role="columnheader" class="actions"><span class="sr-only">Azioni</span></div>
+  </div>
+
+  @for (row of rows(); track $index) {
+    <div class="row" role="row" [class.added]="row.status === 'added'" [class.removed]="row.status === 'removed'">
+      <div class="host" role="cell">
+        <span class="mark" aria-hidden="true">{{ marker(row.status) }}</span>
+        <span>{{ row.record.host }}</span>
+        @if (row.status !== 'same') {
+          <span class="sr-only">{{ statusLabel(row.status) }}</span>
+        }
+      </div>
+      <div role="cell"><span class="badge">{{ row.record.type }}</span></div>
+      <div class="value" role="cell">{{ value(row.record) }}</div>
+      <div class="ttl" role="cell">{{ row.record.ttl ?? '—' }}</div>
+      <div class="actions" role="cell">
+        <button type="button" class="icon-btn" aria-label="Azioni del record" aria-haspopup="menu" (click)="toggle($event, $index)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+        </button>
+        @if (menuIndex() === $index) {
+          <div class="popover" role="menu">
+            <button type="button" role="menuitem" (click)="copy(row.record)">{{ copied() ? 'Copiato ✓' : 'Copia record' }}</button>
+          </div>
+        }
+      </div>
+    </div>
+  } @empty {
+    <div class="empty">Nessun record</div>
+  }
+</div>

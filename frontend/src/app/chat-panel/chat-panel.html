@@ -1,0 +1,179 @@
+<section class="panel" aria-label="Assistente DNS">
+  <header class="head">
+    <span class="avatar ai" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>
+    </span>
+    <div class="who">
+      <div class="name">Assistente DNS</div>
+      <div class="status" [class.off]="zones.online() === false">{{ status() }}</div>
+    </div>
+    <div class="menu-wrap">
+      <button type="button" class="icon-btn" aria-label="Altre azioni" aria-haspopup="menu" (click)="toggleMenu($event)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+      </button>
+      @if (menuOpen()) {
+        <div class="popover" role="menu">
+          <button type="button" role="menuitem" (click)="newChat()">Nuova chat</button>
+          @if (store.activeId()) {
+            <button type="button" role="menuitem" class="danger" (click)="removeActive()">Elimina chat</button>
+          }
+        </div>
+      }
+    </div>
+  </header>
+
+  <div class="scroller" #scroller>
+    <div class="stream">
+      @if (store.conversationLoading()) {
+        <div class="hintline">Caricamento della chat…</div>
+      } @else if (store.messages().length === 0 && !store.sending()) {
+        <div class="empty">
+          <h2>Come vuoi modificare la zona?</h2>
+          <p>
+            Scrivi una richiesta, ad esempio <em>«Sostituisci tutti i record necessari con i record di Shopify»</em>.
+            Vedrai l'anteprima delle modifiche e la zona viene salvata solo dopo la tua conferma.
+          </p>
+        </div>
+      }
+
+      @for (m of store.messages(); track m.id) {
+        @switch (m.role) {
+          @case ('user') {
+            <div class="msg user">
+              <div class="meta"><span>Tu</span><span class="avatar me">{{ initials }}</span></div>
+              <div class="bubble">{{ m.text }}</div>
+            </div>
+          }
+          @case ('assistant') {
+            <div class="msg bot">
+              <div class="meta">
+                <span class="avatar ai sm" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/></svg>
+                </span>
+                <strong>AI</strong>
+                <span class="time">{{ m.time || m.model }}</span>
+              </div>
+
+              <div class="body">
+                @for (b of m.text | blocks; track $index) {
+                  @if (b.type === 'code') {
+                    @if (m.proposal && b.content === m.proposal) {
+                      <div class="card">
+                        <div class="card-head">Aggiorna zona DNS</div>
+                        <pre>{{ b.content }}</pre>
+                      </div>
+                    } @else {
+                      <div class="code"><pre>{{ b.content }}</pre></div>
+                    }
+                  } @else {
+                    <div class="text">
+                      @for (l of b.lines; track $index) {
+                        <p [class.bullet]="l.bullet">
+                          @for (s of l.text | inline; track $index) {
+                            @if (s.bold) {
+                              <strong>{{ s.text }}</strong>
+                            } @else if (s.code) {
+                              <code>{{ s.text }}</code>
+                            } @else {
+                              <span>{{ s.text }}</span>
+                            }
+                          }
+                        </p>
+                      }
+                    </div>
+                  }
+                }
+
+                @if (m.errors && m.errors.length > 0) {
+                  <div class="problems" role="alert">
+                    <strong>La zona non è stata salvata:</strong>
+                    <ul>
+                      @for (e of m.errors; track $index) {
+                        <li>{{ e }}</li>
+                      }
+                    </ul>
+                  </div>
+                }
+
+                @switch (m.state) {
+                  @case ('pending') {
+                    <div class="actions">
+                      <button type="button" class="btn primary" (click)="store.confirm(m.id)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+                        Conferma modifica
+                      </button>
+                      <button type="button" class="btn" (click)="store.dismiss(m.id)">Annulla</button>
+                    </div>
+                  }
+                  @case ('failed') {
+                    <div class="actions">
+                      <button type="button" class="btn primary" (click)="store.confirm(m.id)">Riprova</button>
+                      <button type="button" class="btn" (click)="store.dismiss(m.id)">Annulla</button>
+                    </div>
+                  }
+                  @case ('applying') {
+                    <div class="actions">
+                      <button type="button" class="btn primary" disabled>Salvataggio…</button>
+                      <button type="button" class="btn" disabled>Annulla</button>
+                    </div>
+                  }
+                  @case ('applied') {
+                    <div class="tag ok">✓ Modifica salvata in questa chat</div>
+                  }
+                  @case ('dismissed') {
+                    <div class="tag">Modifica annullata</div>
+                  }
+                }
+
+                @if (m.sources && m.sources.length > 0) {
+                  <div class="sources">
+                    @for (s of m.sources; track s) {
+                      <span class="src" [title]="s">{{ s.split('/').pop() }}</span>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+          @case ('error') {
+            <div class="error" role="alert">{{ m.text }}</div>
+          }
+        }
+      }
+
+      @if (store.sending()) {
+        <div class="msg bot">
+          <div class="meta">
+            <span class="avatar ai sm" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/></svg>
+            </span>
+            <strong>AI</strong>
+          </div>
+          <div class="typing" aria-live="polite"><span></span><span></span><span></span><em>Sto elaborando…</em></div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <form class="composer" (submit)="submit($event)">
+    <textarea
+      #input
+      rows="1"
+      name="message"
+      placeholder="Chiedi una modifica o fai una domanda…"
+      aria-label="Messaggio per l'assistente"
+      [disabled]="!zones.text()"
+      (input)="onInput($event)"
+      (keydown)="onKey($event)"
+    ></textarea>
+    <div class="foot">
+      <span class="scope">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        {{ zones.domain() || 'nessun dominio' }}
+      </span>
+      <button type="submit" class="send" aria-label="Invia" [disabled]="!canSend()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+    </div>
+  </form>
+</section>

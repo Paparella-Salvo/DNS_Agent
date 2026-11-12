@@ -1,0 +1,51 @@
+<section class="zone-view">
+  <div class="head">
+    <div>
+      <div class="eyebrow">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        Zona DNS
+      </div>
+      <div class="menu-wrap">
+        <button type="button" class="domain-title" aria-haspopup="listbox" [attr.aria-expanded]="menuOpen()" (click)="toggleMenu($event)">
+          <h1>{{ zones.domain() || 'Nessun dominio' }}</h1>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        @if (menuOpen()) {
+          <div class="popover domains" role="listbox">
+            @for (d of zones.domains(); track d) {
+              <button type="button" role="option" [attr.aria-selected]="d === zones.domain()" (click)="pick(d)">{{ d }}</button>
+            } @empty {
+              <div class="none">Nessuna zona nella cartella zones</div>
+            }
+          </div>
+        }
+      </div>
+      @if (zones.source() === 'chat') {
+        <span class="pill" title="La zona originale in zones/ non è stata modificata">Versione modificata in questa chat</span>
+      }
+    </div>
+
+    <button type="button" class="btn" [disabled]="!zones.text()" (click)="exportZone()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>
+      Esporta
+    </button>
+  </div>
+
+  @if (zones.loadError(); as err) {
+    <div class="banner error" role="alert">{{ err }}</div>
+  } @else if (zones.loading() && !zones.text()) {
+    <div class="state">Caricamento della zona…</div>
+  }
+
+  @if (zones.text()) {
+    <app-zone-table [rows]="zones.originalRows()" />
+  }
+
+  @if (zones.updatedRows(); as rows) {
+    <section class="updated" aria-label="Zona DNS aggiornata">
+      <h2>Zona DNS aggiornata</h2>
+      <p class="hint">Anteprima: la zona viene salvata solo dopo «Conferma modifica» nella chat.</p>
+      <app-zone-table [rows]="rows" />
+    </section>
+  }
+</section>

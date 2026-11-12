@@ -1,0 +1,15 @@
+$ORIGIN example.com.
+$TTL 86400
+@   IN  SOA ns1.example.com. admin.example.com. (
+        2026100601 ; Serial
+        3600       ; Refresh
+        1800       ; Retry
+        604800     ; Expire
+        86400 )    ; Minimum TTL
+
+@    IN  NS  ns1.example.com.
+@    IN  NS  ns2.example.com. 
+@    IN  A   192.0.2.1
+www  IN  A   192.0.2.1
+@    IN  MX  10 mail.example.com.
+mail IN  A   192.0.2.5

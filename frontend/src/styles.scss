@@ -1,0 +1,153 @@
+:root {
+  color-scheme: light dark;
+
+  --bg: #ffffff;
+  --bg-app: #fafaf9;
+  --surface-2: #f4f5f4;
+  --border: #e7e8e6;
+  --border-strong: #d5d8d4;
+  --text: #1a1f1c;
+  --muted: #68706c;
+  --faint: #9aa19d;
+
+  --accent: #1e6f56;
+  --accent-hover: #185a46;
+  --accent-contrast: #ffffff;
+  --accent-soft: #e6f3ed;
+  --accent-border: #cde5da;
+
+  /* diff della zona */
+  --add-bg: #e2f4e7;
+  --add-bar: #2f9e62;
+  --del-bg: #fdeceb;
+  --del-bar: #e2665e;
+
+  --danger: #b42318;
+  --danger-soft: #fdeceb;
+  --warn: #8a5a00;
+  --warn-soft: #fff4de;
+
+  --radius: 10px;
+  --mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+  --sans: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --shadow: 0 8px 24px rgba(20, 30, 25, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161a18;
+    --bg-app: #111513;
+    --surface-2: #202624;
+    --border: #2a312e;
+    --border-strong: #3a423e;
+    --text: #e7ebe8;
+    --muted: #98a29d;
+    --faint: #6c7671;
+
+    --accent: #3fb68b;
+    --accent-hover: #55c79d;
+    --accent-contrast: #07241b;
+    --accent-soft: #17302a;
+    --accent-border: #25493f;
+
+    --add-bg: #17331f;
+    --add-bar: #3fb68b;
+    --del-bg: #381d1b;
+    --del-bar: #e97e76;
+
+    --danger: #f4857c;
+    --danger-soft: #381d1b;
+    --warn: #f0c36a;
+    --warn-soft: #3a2f14;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg-app);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font: inherit; color: inherit; cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* pulsanti condivisi tra i componenti */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+}
+.btn:hover:not(:disabled) { background: var(--surface-2); }
+.btn:disabled { opacity: 0.55; }
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+.btn.primary:hover:not(:disabled) { background: var(--accent-hover); }
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+}
+.icon-btn:hover { background: var(--surface-2); color: var(--text); }
+
+.popover {
+  position: absolute;
+  z-index: 20;
+  min-width: 150px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+}
+.popover button {
+  display: block;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  text-align: left;
+  font-size: 13px;
+}
+.popover button:hover { background: var(--surface-2); }
+.popover button.danger { color: var(--danger); }

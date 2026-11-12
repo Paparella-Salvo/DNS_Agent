@@ -1,0 +1,17 @@
+# --- Web framework / API (richiesti dal CMD: uvicorn main:app) ---
+fastapi
+uvicorn[standard]
+pydantic
+
+# --- RAG: LangChain + Ollama + ChromaDB ---
+langchain-core
+langchain-ollama
+langchain-chroma
+langchain-text-splitters
+chromadb
+
+# --- Clone repo template e ricerca/scraping web ---
+GitPython
+requests
+beautifulsoup4
+ddgs
